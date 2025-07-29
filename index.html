@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MiniApp</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    .points { font-size: 24px; margin-bottom: 20px; }
+    button { font-size: 20px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+
+  <div class="points">Очки: <span id="points">0</span></div>
+  <button id="watchAd">Смотреть рекламу</button>
+
+  <!-- Adsterra Rewarded Ad Container -->
+  <div id="adContainer" style="display:none;"></div>
+
+  <script>
+    let points = 0;
+
+    // Эмуляция показа рекламы через Adsterra
+    const adButton = document.getElementById("watchAd");
+    const adContainer = document.getElementById("adContainer");
+    const pointsDisplay = document.getElementById("points");
+
+    adButton.onclick = () => {
+      adButton.disabled = true;
+
+      // Показываем Adsterra рекламу
+      adContainer.style.display = "block";
+
+      // Вставь сюда свой рекламный код от Adsterra (Rewarded Video или Interstitial)
+      // Пример ниже — заглушка (эмуляция показа рекламы 5 сек)
+      simulateAdWatch().then(() => {
+        points += 100;
+        pointsDisplay.textContent = points;
+        adButton.disabled = false;
+        adContainer.style.display = "none";
+        alert("Вы получили +100 очков!");
+      });
+    };
+
+    function simulateAdWatch() {
+      return new Promise(resolve => {
+        alert("Смотрим рекламу (5 секунд)...");
+        setTimeout(resolve, 5000); // замена настоящей рекламы
+      });
+    }
+  </script>
+</body>
+</html>
