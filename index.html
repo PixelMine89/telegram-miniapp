@@ -2,11 +2,12 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>MiniApp</title>
+  <title>Mini App с A-ADS</title>
   <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    body { font-family: sans-serif; text-align: center; margin: 40px auto; max-width: 500px; }
     .points { font-size: 24px; margin-bottom: 20px; }
-    button { font-size: 20px; padding: 10px 20px; }
+    button { font-size: 18px; padding: 10px 20px; }
+    #adBlock { margin-top: 20px; display: none; }
   </style>
 </head>
 <body>
@@ -14,40 +15,43 @@
   <div class="points">Очки: <span id="points">0</span></div>
   <button id="watchAd">Смотреть рекламу</button>
 
-  <!-- Adsterra Rewarded Ad Container -->
-  <div id="adContainer" style="display:none;"></div>
+  <div id="adBlock">
+    <p>Реклама (нажмите, дождитесь перехода и вернитесь, чтобы получить 100 очков):</p>
+
+    <!-- Вставлен твой рекламный код -->
+    <div id="frame" style="width:100%; height:100%;">
+      <iframe data-aa='2404885' src='//acceptable.a-ads.com/2404885' 
+              style='border:0px; padding:0; width:100%; height:100px; overflow:hidden; background-color: transparent;'></iframe>
+      <a style="display: block; text-align: right; font-size: 12px;" 
+         id="preview-link" 
+         href="https://aads.com/campaigns/new/?source_id=2404885&source_type=ad_unit&partner=2404885">
+         Advertise here
+      </a>
+    </div>
+  </div>
 
   <script>
     let points = 0;
+    const btn = document.getElementById("watchAd");
+    const display = document.getElementById("points");
+    const adBlock = document.getElementById("adBlock");
 
-    // Эмуляция показа рекламы через Adsterra
-    const adButton = document.getElementById("watchAd");
-    const adContainer = document.getElementById("adContainer");
-    const pointsDisplay = document.getElementById("points");
+    btn.onclick = () => {
+      btn.disabled = true;
+      adBlock.style.display = "block";
 
-    adButton.onclick = () => {
-      adButton.disabled = true;
+      alert("Нажмите на рекламу, дождитесь загрузки, затем вернитесь — вы получите очки.");
 
-      // Показываем Adsterra рекламу
-      adContainer.style.display = "block";
-
-      // Вставь сюда свой рекламный код от Adsterra (Rewarded Video или Interstitial)
-      // Пример ниже — заглушка (эмуляция показа рекламы 5 сек)
-      simulateAdWatch().then(() => {
+      // Симулируем просмотр и возвращение
+      setTimeout(() => {
         points += 100;
-        pointsDisplay.textContent = points;
-        adButton.disabled = false;
-        adContainer.style.display = "none";
+        display.textContent = points;
+        btn.disabled = false;
+        adBlock.style.display = "none";
         alert("Вы получили +100 очков!");
-      });
+      }, 8000); // 8 секунд — имитация показа
     };
-
-    function simulateAdWatch() {
-      return new Promise(resolve => {
-        alert("Смотрим рекламу (5 секунд)...");
-        setTimeout(resolve, 5000); // замена настоящей рекламы
-      });
-    }
   </script>
+
 </body>
 </html>
