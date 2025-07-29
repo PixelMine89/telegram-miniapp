@@ -1,56 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>Mini App с A-ADS</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: system-ui, sans-serif;
+      background: #f4f4f8;
+      padding: 40px 20px;
+      max-width: 480px;
+      margin: auto;
       text-align: center;
-      margin: 40px auto;
-      max-width: 500px;
     }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
     .points {
-      font-size: 24px;
+      font-size: 22px;
       margin-bottom: 20px;
     }
-    button {
-      font-size: 18px;
-      padding: 10px 20px;
+
+    .ad-container {
+      background: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    #adBlock {
-      margin-top: 20px;
+
+    #frame {
+      width: 100%;
+      height: 300px;
+    }
+
+    iframe {
+      border: 0;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+    }
+
+    #frame-link {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .info-text {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    button {
+      background-color: #0088cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .success {
+      color: green;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
 
+  <h1>🚀 Telegram Mini App</h1>
   <div class="points">Очки: <span id="points">0</span></div>
-  <button id="watchAd">Смотреть рекламу</button>
 
-  <!-- Блок с рекламой A-ADS сразу видим -->
-  <div id="adBlock">
-    <p>Реклама (нажмите, дождитесь перехода и вернитесь, чтобы получить 100 очков):</p>
-    <div id="frame" style="width: 100%;"><iframe data-aa='2404885' src='//acceptable.a-ads.com/2404885' style='border:0px; padding:0; width:100%; height:100%; overflow:hidden; background-color: transparent;'></iframe><a style="display: block; text-align: right; font-size: 12px" id="frame-link" href="https://aads.com/campaigns/new/?source_id=2404885&source_type=ad_unit&partner=2404885">Advertise here</a></div>
+  <div class="ad-container">
+    <div class="info-text">👆 Нажми по рекламе ниже и подожди 10 секунд — получишь +100 очков!</div>
+    
+    <div id="frame">
+      <iframe data-aa='2404885' src='//acceptable.a-ads.com/2404885'></iframe>
+      <a id="frame-link" href="https://aads.com/campaigns/new/?source_id=2404885&source_type=ad_unit&partner=2404885">Advertise here</a>
+    </div>
   </div>
+
+  <button id="rewardBtn" disabled>Получить 100 очков</button>
+
+  <div id="message" class="success"></div>
 
   <script>
     let points = 0;
-    const btn = document.getElementById("watchAd");
-    const display = document.getElementById("points");
+    let rewardBtn = document.getElementById("rewardBtn");
+    let pointsDisplay = document.getElementById("points");
+    let message = document.getElementById("message");
+    let rewardReady = false;
 
-    btn.onclick = () => {
-      btn.disabled = true;
+    // Обработчик клика по iframe ссылке
+    document.getElementById("frame").addEventListener("click", () => {
+      if (rewardReady) return; // чтобы не нажимать снова
 
-      alert("Нажмите на рекламу, дождитесь загрузки, затем вернитесь — вы получите очки.");
+      message.textContent = "⏳ Ждём 10 секунд...";
+      rewardReady = true;
 
-      // Эмуляция "просмотра"
+      // 10 секунд кулдаун
       setTimeout(() => {
-        points += 100;
-        display.textContent = points;
-        btn.disabled = false;
-        alert("Вы получили +100 очков!");
-      }, 8000); // 8 секунд для симуляции
+        rewardBtn.disabled = false;
+        message.textContent = "✅ Готово! Нажми кнопку, чтобы получить 100 очков.";
+      }, 10000);
+    });
+
+    rewardBtn.onclick = () => {
+      points += 100;
+      pointsDisplay.textContent = points;
+      rewardBtn.disabled = true;
+      rewardReady = false;
+      message.textContent = "🎉 Вы получили 100 очков!";
     };
   </script>
 
