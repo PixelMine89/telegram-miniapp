@@ -2,129 +2,34 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Mini App с A-ADS</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #f4f4f8;
-      padding: 40px 20px;
-      max-width: 480px;
-      margin: auto;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    .points {
-      font-size: 22px;
-      margin-bottom: 20px;
-    }
-
-    .ad-container {
-      background: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 12px;
-      margin: 20px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    #frame {
-      width: 100%;
-      height: 300px;
-    }
-
-    iframe {
-      border: 0;
-      width: 100%;
-      height: 100%;
-      background-color: transparent;
-    }
-
-    #frame-link {
-      display: block;
-      text-align: right;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-
-    .info-text {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 8px;
-    }
-
-    button {
-      background-color: #0088cc;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 18px;
-      padding: 12px 20px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    button:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
-    }
-
-    .success {
-      color: green;
-      margin-top: 15px;
-    }
-  </style>
+  <title>MiniApp AdsGram</title>
 </head>
-<body>
+<body style="font-family:sans-serif;text-align:center;padding:40px;">
+  <h2>Очки: <span id="points">0</span></h2>
+  <button id="watchBtn">Смотреть рекламу</button>
 
-  <h1>🚀 Telegram Mini App</h1>
-  <div class="points">Очки: <span id="points">0</span></div>
-
-  <div class="ad-container">
-    <div class="info-text">👆 Нажми по рекламе ниже и подожди 10 секунд — получишь +100 очков!</div>
-    
-    <div id="frame">
-      <iframe data-aa='2404885' src='//acceptable.a-ads.com/2404885'></iframe>
-      <a id="frame-link" href="https://aads.com/campaigns/new/?source_id=2404885&source_type=ad_unit&partner=2404885">Advertise here</a>
-    </div>
-  </div>
-
-  <button id="rewardBtn" disabled>Получить 100 очков</button>
-
-  <div id="message" class="success"></div>
-
+  <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
   <script>
+    const blockId = "ТВОЙ_BLOCK_ID";
+    const AdController = window.Adsgram.init({ blockId });
+
     let points = 0;
-    let rewardBtn = document.getElementById("rewardBtn");
-    let pointsDisplay = document.getElementById("points");
-    let message = document.getElementById("message");
-    let rewardReady = false;
+    const btn = document.getElementById("watchBtn");
+    const display = document.getElementById("points");
 
-    // Обработчик клика по iframe ссылке
-    document.getElementById("frame").addEventListener("click", () => {
-      if (rewardReady) return; // чтобы не нажимать снова
-
-      message.textContent = "⏳ Ждём 10 секунд...";
-      rewardReady = true;
-
-      // 10 секунд кулдаун
-      setTimeout(() => {
-        rewardBtn.disabled = false;
-        message.textContent = "✅ Готово! Нажми кнопку, чтобы получить 100 очков.";
-      }, 10000);
-    });
-
-    rewardBtn.onclick = () => {
-      points += 100;
-      pointsDisplay.textContent = points;
-      rewardBtn.disabled = true;
-      rewardReady = false;
-      message.textContent = "🎉 Вы получили 100 очков!";
+    btn.onclick = () => {
+      btn.disabled = true;
+      AdController.show()
+        .then(result => {
+          if (result.done) {
+            points += 10;
+            display.textContent = points;
+          }
+        })
+        .finally(() => {
+          btn.disabled = false;
+        });
     };
   </script>
-
 </body>
 </html>
